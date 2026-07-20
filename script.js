@@ -8,111 +8,120 @@ const STAGES = [
   "Stewardship"
 ];
 
-function renderPipeline(currentStage){
+function renderPipeline(currentStage) {
 
-    const container =
-      document.getElementById("pipeline-container");
+  const container = document.getElementById("pipeline-container");
 
-    container.innerHTML = "";
+  if (!container) return;
 
-    if(
-      currentStage === "Not Interested" ||
-      currentStage === "Not Interested / Closed"
-    ){
+  container.innerHTML = "";
 
-        container.innerHTML = `
-          <div class="not-interested">
-              ❌ Not Interested
-          </div>
-        `;
+  if (
+    currentStage === "Not Interested" ||
+    currentStage === "Not Interested / Closed"
+  ) {
+    container.innerHTML = `
+      <div class="not-interested">
+        ❌ Not Interested
+      </div>
+    `;
+    return;
+  }
 
-        return;
-    }
+  const currentIndex = STAGES.indexOf(currentStage);
 
-    const currentIndex =
-      STAGES.indexOf(currentStage);
-
-    let html = `
-      <div class="pipeline-card">
+  let html = `
+    <div class="pipeline-card">
       <div class="pipeline-title">
         Pipeline Status
       </div>
 
       <div class="pipeline">
-    `;
+  `;
 
-    STAGES.forEach((stage,index)=>{
+  STAGES.forEach((stage, index) => {
 
-        let css = "pending";
-        let icon = "";
+    let css = "pending";
+    let icon = "";
 
-        if(index < currentIndex){
-
-            css = "completed";
-            icon = "✓";
-
-        }else if(index === currentIndex){
-
-            css = "current";
-            icon = "•";
-        }
-
-        html += `
-            <div class="stage">
-
-                <div class="circle ${css}">
-                    ${icon}
-                </div>
-
-                <div class="label">
-                    ${stage}
-                </div>
-
-            </div>
-        `;
-    });
+    if (index < currentIndex) {
+      css = "completed";
+      icon = "✓";
+    } else if (index === currentIndex) {
+      css = "current";
+      icon = "●";
+    }
 
     html += `
+      <div class="stage">
+
+        <div class="circle ${css}">
+          ${icon}
         </div>
+
+        <div class="label">
+          ${stage}
+        </div>
+
       </div>
     `;
+  });
 
-    container.innerHTML = html;
+  html += `
+      </div>
+    </div>
+  `;
+
+  container.innerHTML = html;
 }
 
-/*
-==================================================
-LOOKER STUDIO DATA
-==================================================
-*/
+/* ==========================
+   LOOKER STUDIO MODE
+========================== */
 
-dscc.subscribeToData(draw,{
-    transform: dscc.objectTransform
-});
+function draw(data) {
 
-function draw(data){
+  try {
 
-    try{
+    const rows = data.tables.DEFAULT;
 
-        const rows = data.tables.DEFAULT;
-
-        if(!rows || rows.length === 0){
-
-            renderPipeline("Prospect");
-            return;
-        }
-
-        const row = rows[0];
-
-        const currentStage =
-            row["Current Stage"];
-
-        renderPipeline(currentStage);
-
-    }catch(error){
-
-        console.error(error);
-
-        renderPipeline("Prospect");
+    if (!rows || rows.length === 0) {
+      renderPipeline("Prospect");
+      return;
     }
+
+    const row = rows[0];
+
+    // Change this if your Looker field name differs
+    const currentStage = row["Current Stage"];
+
+    renderPipeline(currentStage);
+
+  } catch (err) {
+
+    console.error(err);
+    renderPipeline("Prospect");
+
+  }
 }
+
+/* ==========================
+   AUTO DETECT ENVIRONMENT
+========================== */
+
+window.onload = function () {
+
+  if (typeof dscc !== "undefined") {
+
+    dscc.subscribeToData(draw, {
+      transform: dscc.objectTransform
+    });
+
+  } else {
+
+    // Demo mode for GitHub Pages testing
+    renderPipeline("Proposal");
+
+  }
+
+};
