@@ -1,8 +1,21 @@
 {
   "name": "HNI Pipeline Tracker",
+  "description": "Shows HNI Pipeline Progress",
+  "logoUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/logo.png",
   "organization": "Lotus Petal Foundation",
-  "description": "Pipeline status visualization for HNI prospects",
-  "logoUrl": "",
-  "supportUrl": "",
-  "devMode": true
+  "supportUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
+  "privacyPolicyUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
+  "termsOfServiceUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
+  "devMode": true,
+  "components": [
+    {
+      "id": "hni_pipeline_tracker",
+      "name": "HNI Pipeline Tracker",
+      "description": "Pipeline status visualization",
+      "resource": {
+        "js": "script.js",
+        "css": "style.css"
+      }
+    }
+  ]
 }
