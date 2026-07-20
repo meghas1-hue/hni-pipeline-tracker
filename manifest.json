@@ -1,0 +1,8 @@
+{
+  "name": "HNI Pipeline Tracker",
+  "organization": "Lotus Petal Foundation",
+  "description": "Pipeline status visualization for HNI prospects",
+  "logoUrl": "",
+  "supportUrl": "",
+  "devMode": true
+}
