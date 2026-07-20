@@ -3,24 +3,20 @@
   "organization": "Lotus Petal Foundation",
   "description": "Visualize HNI donor pipeline stages",
   "logoUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/logo.png",
+  "packageUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
   "supportUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
-  "privacyPolicyUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
-  "termsOfServiceUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/",
   "devMode": true,
-
-  "dataSchema": [
+  "components": [
     {
-      "name": "Current Stage",
-      "dataType": "STRING"
+      "id": "hniPipelineTracker",
+      "name": "HNI Pipeline Tracker",
+      "description": "Visualize HNI donor pipeline stages",
+      "iconUrl": "https://meghas1-hue.github.io/hni-pipeline-tracker/logo.png",
+      "resource": {
+        "js": "https://meghas1-hue.github.io/hni-pipeline-tracker/script.js",
+        "css": "https://meghas1-hue.github.io/hni-pipeline-tracker/style.css",
+        "config": "https://meghas1-hue.github.io/hni-pipeline-tracker/config.json"
+      }
     }
-  ],
-
-  "resources": {
-    "js": [
-      "script.js"
-    ],
-    "css": [
-      "style.css"
-    ]
-  }
+  ]
 }
