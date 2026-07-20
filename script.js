@@ -16,26 +16,11 @@ function renderPipeline(currentStage) {
 
   container.innerHTML = "";
 
-  if (
-    currentStage === "Not Interested" ||
-    currentStage === "Not Interested / Closed"
-  ) {
-    container.innerHTML = `
-      <div class="not-interested">
-        ❌ Not Interested
-      </div>
-    `;
-    return;
-  }
-
   const currentIndex = STAGES.indexOf(currentStage);
 
   let html = `
     <div class="pipeline-card">
-      <div class="pipeline-title">
-        Pipeline Status
-      </div>
-
+      <div class="pipeline-title">Pipeline Status</div>
       <div class="pipeline">
   `;
 
@@ -54,15 +39,10 @@ function renderPipeline(currentStage) {
 
     html += `
       <div class="stage">
-
         <div class="circle ${css}">
           ${icon}
         </div>
-
-        <div class="label">
-          ${stage}
-        </div>
-
+        <div class="label">${stage}</div>
       </div>
     `;
   });
@@ -74,10 +54,6 @@ function renderPipeline(currentStage) {
 
   container.innerHTML = html;
 }
-
-/* ==========================
-   LOOKER STUDIO MODE
-========================== */
 
 function draw(data) {
 
@@ -92,23 +68,30 @@ function draw(data) {
 
     const row = rows[0];
 
-    // Change this if your Looker field name differs
-    const currentStage = row["Current Stage"];
+    let currentStage = "";
+
+    // Find Current Stage field automatically
+    Object.keys(row).forEach(key => {
+      if (key.toLowerCase().includes("stage")) {
+        currentStage = row[key];
+      }
+    });
+
+    if (!currentStage) {
+      currentStage = "Prospect";
+    }
 
     renderPipeline(currentStage);
 
-  } catch (err) {
+  } catch (e) {
 
-    console.error(err);
+    console.error(e);
     renderPipeline("Prospect");
 
   }
 }
 
-/* ==========================
-   AUTO DETECT ENVIRONMENT
-========================== */
-
+// GitHub Test Mode + Looker Studio Mode
 window.onload = function () {
 
   if (typeof dscc !== "undefined") {
@@ -119,7 +102,7 @@ window.onload = function () {
 
   } else {
 
-    // Demo mode for GitHub Pages testing
+    // Demo mode
     renderPipeline("Proposal");
 
   }
