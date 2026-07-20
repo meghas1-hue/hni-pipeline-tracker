@@ -8,12 +8,18 @@ const STAGES = [
   "Stewardship"
 ];
 
+function ensureContainer() {
+  let container = document.getElementById("pipeline-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "pipeline-container";
+    document.body.appendChild(container);
+  }
+  return container;
+}
+
 function renderPipeline(currentStage) {
-
-  const container = document.getElementById("pipeline-container");
-
-  if (!container) return;
-
+  const container = ensureContainer();
   container.innerHTML = "";
 
   const currentIndex = STAGES.indexOf(currentStage);
@@ -25,10 +31,8 @@ function renderPipeline(currentStage) {
   `;
 
   STAGES.forEach((stage, index) => {
-
     let css = "pending";
     let icon = "";
-
     if (index < currentIndex) {
       css = "completed";
       icon = "✓";
@@ -36,7 +40,6 @@ function renderPipeline(currentStage) {
       css = "current";
       icon = "●";
     }
-
     html += `
       <div class="stage">
         <div class="circle ${css}">
@@ -56,18 +59,14 @@ function renderPipeline(currentStage) {
 }
 
 function draw(data) {
-
   try {
-
     const rows = data.tables.DEFAULT;
-
     if (!rows || rows.length === 0) {
       renderPipeline("Prospect");
       return;
     }
 
     const row = rows[0];
-
     let currentStage = "";
 
     // Find Current Stage field automatically
@@ -82,29 +81,23 @@ function draw(data) {
     }
 
     renderPipeline(currentStage);
-
   } catch (e) {
-
     console.error(e);
     renderPipeline("Prospect");
-
   }
 }
 
 // GitHub Test Mode + Looker Studio Mode
 window.onload = function () {
+  ensureContainer();
 
   if (typeof dscc !== "undefined") {
-
     dscc.subscribeToData(draw, {
       transform: dscc.objectTransform
     });
-
   } else {
-
-    // Demo mode
+    // Demo mode (only runs when opened outside Looker Studio,
+    // e.g. directly in a browser tab for local testing)
     renderPipeline("Proposal");
-
   }
-
 };
